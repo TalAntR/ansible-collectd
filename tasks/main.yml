@@ -1,0 +1,21 @@
+---
+
+- name: include OS-specific settings
+  include_vars: "{{ ansible_os_family | lower }}.yml"
+  tags: always
+
+- include: prepare.yml
+  tags: prepare
+
+- include: install.yml
+  tags: install
+
+- include: configure.yml
+  tags: configure
+
+- include: restart.yml
+  tags: [start, restart]
+
+# Verification tasks to make sure that the service is fine
+- include: verify.yml
+  tags: verify

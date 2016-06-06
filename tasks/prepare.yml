@@ -1,0 +1,10 @@
+---
+
+# Add apt/yum repository for collectd
+- name: prepare rhel
+  include: rhel/prepare.yml
+  when: (ansible_os_family | lower == "redhat")
+
+- name: prepare debian
+  include: debian/prepare.yml
+  when: (ansible_os_family | lower == "debian")

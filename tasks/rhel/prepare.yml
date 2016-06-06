@@ -1,0 +1,16 @@
+---
+
+#- name: add repository key
+#  rpm_key: key=http://pkg.ci.collectd.org/pubkey.asc
+#           state=present
+
+- name: add repositories
+  yum_repository: name="{{ collectd.service.name }}"
+                  description="Collectd maintainer repository"
+                  file="{{ collectd.service.name }}"
+                  baseurl="{{ item.url }}"
+                  gpgkey="{{ item.key }}"
+                  gpgcheck=yes
+                  enabled=yes
+  with_items: "{{ collectd.providers.pkg.repositories }}"
+

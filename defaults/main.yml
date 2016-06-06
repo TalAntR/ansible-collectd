@@ -1,0 +1,60 @@
+collectd_version: "{{ version | default('0.0.0') }}"
+
+collectd:
+
+  service:
+    # Name of the managed service
+    name: "collectd"
+
+    # Version of the collectd daemon
+    version: "{{ collectd_version }}"
+
+    # Base/working directory for collectd daemon
+    home: "{{ collectd_home | default('/var/lib/collectd') }}"
+
+    # Location for configuration files
+    conf: "/etc/collectd"
+
+    # Name of SysV script or Systemd unit
+    daemon: "collectd"
+
+    # Processes and files owner
+    owner: "root"
+
+    # Global options for collectd service
+    options:
+      AutoLoadPlugin: false
+      Include "/etc/collectd/collectd.conf.d":
+        Filter: "*.conf"
+
+  plugins:
+    # Submit all events to the syslog-daemon
+    syslog:
+      enabled: true
+      options:
+        LogLevel: "notice"
+
+    # Collects CPU usage metrics
+    cpu:
+      enabled: true
+      options:
+        ReportByCpu: false
+        ValuesPercentage: true
+
+    # Collects information about the usage of physical and logical disks
+    disk: true
+    # Collect data from all network interfaces
+    interface: true
+    # Reporting of runnable tasks in the run-queue
+    load: true
+    # Reporting of physical memory usage
+    memory: true
+
+  # IT'S NOT USED RIGHT NOW
+  chains:
+    pre-cache:
+      #- name:
+    post-cache:
+
+  # Source of binary files
+  providers: {}

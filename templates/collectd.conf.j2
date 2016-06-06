@@ -1,0 +1,57 @@
+#jinja2: lstrip_blocks: True
+# Config file for collectd(1).
+#
+# Some plugins need additional configuration and are disabled by default.
+# Please read collectd.conf(5) for details.
+#
+# {{ ansible_managed }}
+#
+
+{%- macro print_opts(options, indent='	', count=0) %}
+{% for key, value  in options.iteritems() %}
+  {% if value is mapping %}
+    {{- indent*count }}<{{ key }}>
+    {# Render options -#}
+    {{ print_opts(value, indent, count+1) -}}
+    {{- indent*count }}</{{ key.split()[0] }}>
+  {% elif value in [true, false] %}
+    {{- indent*count }}{{ key }} {{ value | lower }}
+  {% elif value is number %}
+    {{- indent*count }}{{ key }} {{ value }}
+  {% else %}
+    {{- indent*count }}{{ key }} "{{ value }}"
+  {% endif %}
+{% endfor %}
+{% endmacro %}
+
+
+#################################################################################
+# Global                                                                        #
+#-------------------------------------------------------------------------------#
+# Global settings for the daemon.                                               #
+#################################################################################
+{% set service = collectd.service %}
+{% if service.options is defined %}
+  {{- print_opts(service.options, indent='  ', count=0) }}
+{% endif %}
+
+
+#################################################################################
+# LoadPlugin section                                                            #
+#-------------------------------------------------------------------------------#
+# Specify what features to activate.                                            #
+#################################################################################
+{% set plugins = collectd.plugins %}
+{% for name, opts in plugins.iteritems() %}
+
+  {# Add a plugin if it's enabled #}
+  {% if opts == True or opts.enabled is defined and opts.enabled == True -%}
+    LoadPlugin "{{ name }}"
+    {% if opts.options is defined -%}
+      <Plugin "{{ name }}">
+      {# Render plugin options -#}
+      {{ print_opts(opts.options, indent='  ', count=1) -}}
+      </Plugin>
+    {% endif %}
+  {% endif %}
+{% endfor %}

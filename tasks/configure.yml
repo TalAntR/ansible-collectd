@@ -1,0 +1,9 @@
+---
+
+- name: deliver configuration
+  template: src=collectd.conf.j2
+            dest={{ collectd.service.conf }}/collectd.conf
+            owner={{ collectd.service.owner }}
+            group={{ collectd.service.owner }}
+            mode=0440
+  notify: restart collectd

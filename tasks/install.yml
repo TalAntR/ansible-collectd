@@ -1,0 +1,9 @@
+---
+
+- name: install packages
+  package: name={{ collectd.providers.pkg.delim.join([item, collectd.service.version]) }}*
+           state=present
+  with_items: "{{ collectd.providers.pkg.packages }}"
+
+- name: enable autostart on boot
+  service: name={{ collectd.service.daemon }} enabled=yes
