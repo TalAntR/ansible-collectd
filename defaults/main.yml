@@ -41,12 +41,26 @@ collectd:
         ReportByCpu: false
         ValuesPercentage: true
 
-    # Collects information about the usage of physical and logical disks
-    disk: true
-    # Collect data from all network interfaces
-    interface: true
     # Reporting of runnable tasks in the run-queue
     load: true
+
+    # Collects information about the usage of physical and logical disks
+    disk: true
+
+    # Collects file system usage information
+    df: true
+
+    # Collects information about used and available swap space
+    swap: true
+
+    # Collect data from all network interfaces
+    interface: true
+
+    # Collects information about NICs
+    ethstat: true
+
+    netlink: true
+
     # Reporting of physical memory usage
     memory: true
 
@@ -56,5 +70,5 @@ collectd:
       #- name:
     post-cache:
 
-  # Source of binary files
+  # Source for binary files
   providers: {}

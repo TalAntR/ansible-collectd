@@ -27,27 +27,14 @@
 
 
 #################################################################################
-# Global                                                                        #
-#-------------------------------------------------------------------------------#
-# Global settings for the daemon.                                               #
-#################################################################################
-{% set service = collectd.service %}
-{% if service.options is defined %}
-  {{- print_opts(service.options, indent='  ', count=0) }}
-{% endif %}
-
-
-#################################################################################
 # LoadPlugin section                                                            #
-#-------------------------------------------------------------------------------#
-# Specify what features to activate.                                            #
 #################################################################################
 {% set plugins = collectd.plugins %}
 {% for name in plugins.keys() | sort %}
   {% set opts = plugins[name] %}
-  {% if opts.file is undefined -%}
+  {% if opts.file is defined and opts.file == item -%}
     {# Load a plugin if it's enabled #}
-    {% if opts == True or opts.enabled is defined and opts.enabled == True -%}
+    {% if opts.enabled is defined and opts.enabled == True -%}
       LoadPlugin "{{ name }}"
     {% endif %}
   {% endif %}
@@ -56,13 +43,10 @@
 
 #################################################################################
 # Plugin configuration                                                          #
-#-------------------------------------------------------------------------------#
-# In this section configuration stubs for each plugin are provided. A desc-     #
-# ription of those options is available in the collectd.conf(5) manual page.    #
 #################################################################################
 {% for name in plugins.keys() %}
   {% set opts = plugins[name] %}
-  {%- if opts.file is undefined -%}
+  {% if opts.file is defined and opts.file == item -%}
     {% if opts.options is defined and opts.enabled is defined and opts.enabled == True -%}
       <Plugin "{{ name }}">
       {# Render plugin options -#}

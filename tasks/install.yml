@@ -5,5 +5,8 @@
            state=present
   with_items: "{{ collectd.providers.pkg.packages }}"
 
+- name: create *.conf.d folder
+  file: path={{ collectd.service.conf }}/collectd.conf.d state=directory
+
 - name: enable autostart on boot
   service: name={{ collectd.service.daemon }} enabled=yes

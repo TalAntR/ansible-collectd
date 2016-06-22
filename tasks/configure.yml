@@ -1,9 +1,18 @@
 ---
 
+- name: deliver conf.d files
+  template: src=collectd.conf.inc.j2
+            dest={{ collectd.service.conf }}/collectd.conf.d/{{ item }}.conf
+            owner={{ collectd.service.owner }}
+            group={{ collectd.service.owner }}
+            mode=0640
+  with_items: "{{ collectd.plugins.values() | selectattr('file','defined') | groupby('file') | map(attribute='grouper') | list }}"
+  notify: restart collectd
+
 - name: deliver configuration
   template: src=collectd.conf.j2
             dest={{ collectd.service.conf }}/collectd.conf
             owner={{ collectd.service.owner }}
             group={{ collectd.service.owner }}
-            mode=0440
+            mode=0640
   notify: restart collectd
