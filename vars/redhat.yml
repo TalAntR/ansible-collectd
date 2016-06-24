@@ -2,16 +2,3 @@ collectd:
   service:
     # Location for configuration files
     conf: /etc
-
-  # Define settings for YUM repository
-  providers:
-    # Configuration settings and packages for RHEL Linux
-    pkg:
-      # Delimiter for package name and version
-      delim: "-"
-      repositories:
-        - url: http://pkg.ci.collectd.org/rpm/collectd-{{ collectd_version.split('.')[:2] | join('.') }}/epel-{{ ansible_distribution_major_version }}-$basearch
-          key: http://pkg.ci.collectd.org/pubkey.asc
-      packages:
-        - collectd
-        - collectd-disk

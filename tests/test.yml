@@ -1,0 +1,26 @@
+---
+
+- hosts: all
+  remote_user: root
+  roles:
+    - role: collectd
+      collectd_version: 5.5.1
+      collectd:
+        service:
+          options:
+            FQDNLookup: false
+        plugins:
+          write_graphite:
+            file: graphite
+            enabled: true
+            options:
+              Node "graphite-server":
+                Host: "graphite.example.lo"
+                LogSendErrors: true
+                Port: "2103"
+                Prefix: "collectd."
+                Protocol: "tcp"
+                EscapeCharacter: "_"
+                SeparateInstances: true
+                StoreRates: false
+                AlwaysAppendDS: false
