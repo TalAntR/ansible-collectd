@@ -10,17 +10,23 @@
 {%- macro print_opts(options, indent='	', count=0) %}
 {% for key in options.keys() | sort %}
   {% set value = options[key] %}
-  {% if value is mapping %}
-    {{- indent*count }}<{{ key }}>
-    {# Render options -#}
-    {{ print_opts(value, indent, count+1) -}}
-    {{- indent*count }}</{{ key.split()[0] }}>
+  {% if value is string %}
+    {{- indent*count }}{{ key }} {{ '"' + value.split('\t') | join('" "') + '"' }}
   {% elif value in [true, false] %}
     {{- indent*count }}{{ key }} {{ value | lower }}
   {% elif value is number %}
     {{- indent*count }}{{ key }} {{ value }}
+  {% elif value is mapping %}
+    {{- indent*count }}<{{ key }}>
+    {# Render options -#}
+    {{ print_opts(value, indent, count+1) -}}
+    {{- indent*count }}</{{ key.split()[0] }}>
+  {% elif value is sequence %}
+    {% for i in value | sort -%}
+      {{ print_opts({key: i}, indent, count) -}}
+    {%- endfor %}
   {% else %}
-    {{- indent*count }}{{ key }} "{{ value }}"
+    {{- indent*count }}{{ key }} Hey "{{ value }}"
   {% endif %}
 {% endfor %}
 {% endmacro %}

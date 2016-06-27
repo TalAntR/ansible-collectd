@@ -51,10 +51,12 @@ An example of how to use collectd agent:
                   options:
                     FQDNLookup: false
                 plugins:
+                  # Write configuration in graphite.conf file
                   write_graphite:
+                    file: graphite
                     enabled: true
                     options:
-                      Node "tt-graphite-omsk":
+                      Node "graphite":
                         Host: "graphite-dev.example.lo"
                         LogSendErrors: true
                         Port: "2103"
@@ -64,6 +66,14 @@ An example of how to use collectd agent:
                         SeparateInstances: true
                         StoreRates: false
                         AlwaysAppendDS: false
+                        AlwaysAppendDS: false
+                  # Write configuration in main configuration file
+                  network:
+                    enabled: false
+                    options:
+                      Server:
+                        - "collectd-server-01.example.lo	23451"
+                        - "collectd-server-02.example.lo	23451"
 
 
 License

@@ -3,7 +3,7 @@
 - name: install packages
   package: name={{ collectd.providers.pkg.delim.join([item, collectd.service.version]) }}*
            state=present
-  with_items: "{{ collectd.providers.pkg.packages }}"
+  with_items: "{{ collectd.providers.pkg.packages | select | list }}"
 
 - name: create *.conf.d folder
   file: path={{ collectd.service.conf }}/collectd.conf.d state=directory
