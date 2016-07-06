@@ -1,4 +1,9 @@
+---
+
 collectd:
+  service:
+    conf: /etc/collectd
+
   # Define settings for APT repository
   providers:
     # Configuration settings and packages for Debian-based Linux
