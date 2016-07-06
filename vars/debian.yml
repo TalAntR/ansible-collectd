@@ -4,6 +4,11 @@ collectd:
   service:
     conf: /etc/collectd
 
+    # Global options for collectd service
+    options:
+      Include "/etc/collect/collectd.conf.d":
+        Filter: "*.conf"
+
   # Define settings for APT repository
   providers:
     # Configuration settings and packages for Debian-based Linux

@@ -25,7 +25,7 @@ collectd:
     # Global options for collectd service
     options:
       AutoLoadPlugin: false
-      Include "/etc/collectd/collectd.conf.d":
+      Include "/etc/collectd.conf.d":
         Filter: "*.conf"
 
   plugins:
