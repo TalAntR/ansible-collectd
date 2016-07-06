@@ -14,7 +14,7 @@ collectd:
     home: "{{ collectd_home | default('/var/lib/collectd') }}"
 
     # Location for configuration files
-    conf: "/etc"
+    conf: "/etc/collectd.d"
 
     # Name of SysV script or Systemd unit
     daemon: "collectd"
@@ -25,8 +25,7 @@ collectd:
     # Global options for collectd service
     options:
       AutoLoadPlugin: false
-      Include "/etc/collectd.conf.d":
-        Filter: "*.conf"
+      Include: "/etc/collectd.d/*.conf"
 
   plugins:
     # Submit all events to the syslog-daemon

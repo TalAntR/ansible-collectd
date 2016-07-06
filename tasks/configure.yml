@@ -2,7 +2,7 @@
 
 - name: deliver conf.d files
   template: src=collectd.conf.inc.j2
-            dest={{ collectd.service.conf }}/collectd.conf.d/{{ item }}.conf
+            dest={{ collectd.service.conf }}/{{ item }}.conf
             owner={{ collectd.service.owner }}
             group={{ collectd.service.owner }}
             mode=0640
@@ -11,7 +11,7 @@
 
 - name: deliver configuration
   template: src=collectd.conf.j2
-            dest={{ collectd.service.conf }}/collectd.conf
+            dest={{ collectd.service.conf }}/../collectd.conf
             owner={{ collectd.service.owner }}
             group={{ collectd.service.owner }}
             mode=0640
