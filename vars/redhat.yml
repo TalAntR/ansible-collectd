@@ -1,4 +1,3 @@
-collectd:
-  service:
-    # Location for configuration files
-    conf: /etc
+---
+
+# All varibales are defined in defaults/main.yml for RedHat family

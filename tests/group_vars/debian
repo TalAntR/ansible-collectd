@@ -1,0 +1,6 @@
+collectd:
+  providers:
+    pkg:
+      packages:
+        - collectd
+        - collectd-utils

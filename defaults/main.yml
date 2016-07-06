@@ -1,5 +1,6 @@
 collectd_version: "{{ version | default('0.0.0') }}"
 
+
 collectd:
 
   service:
@@ -13,7 +14,7 @@ collectd:
     home: "{{ collectd_home | default('/var/lib/collectd') }}"
 
     # Location for configuration files
-    conf: "/etc/collectd"
+    conf: "/etc"
 
     # Name of SysV script or Systemd unit
     daemon: "collectd"
@@ -44,22 +45,24 @@ collectd:
     # Reporting of runnable tasks in the run-queue
     load: true
 
+    # Collects file system usage information
+    df:
+      enabled: true
+      options:
+        ReportInodes: true
+
     # Collects information about the usage of physical and logical disks
     disk: true
-
-    # Collects file system usage information
-    df: true
 
     # Collects information about used and available swap space
     swap: true
 
-    # Collect data from all network interfaces
-    interface: true
-
-    # Collects information about NICs
-    ethstat: true
-
-    netlink: true
+    # Get statistics for interfaces through netlink socket to the Linux kernel
+    netlink:
+      enabled: true
+      options:
+        Interface: "lo"
+        IgnoreSelected: true
 
     # Reporting of physical memory usage
     memory: true

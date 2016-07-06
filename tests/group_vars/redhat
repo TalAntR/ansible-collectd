@@ -1,0 +1,7 @@
+collectd:
+  providers:
+    pkg:
+      packages:
+        - collectd
+        - collectd-disk
+        - collectd-netlink
