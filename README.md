@@ -1,6 +1,8 @@
 Collectd Agent
 =========
 
+[![Build Status](https://travis-ci.org/TalAntR/ansible-collectd.svg?branch=master)](https://travis-ci.org/TalAntR/ansible-collectd)
+
 This is an Ansible role for collectd agent. By default it uses a
 [CI repositories](http://pkg.ci.collectd.org/) from collectd vendor to
 install the latest versions of agent and plugins.
