@@ -3,9 +3,14 @@ Collectd Agent
 
 [![Build Status](https://travis-ci.org/TalAntR/ansible-collectd.svg?branch=master)](https://travis-ci.org/TalAntR/ansible-collectd)
 
-This is an Ansible role for collectd agent. By default it uses a
-[CI repositories](http://pkg.ci.collectd.org/) from collectd vendor to
-install the latest versions of agent and plugins.
+
+This is an Ansible role for collectd agent. The collectd has a lot of configurable
+plugins which provide powerfull capabilities. However you no need to use majority 
+of them, so it's reasonable to have an Ansible role which give a chance to configure
+selected plugins only. This code is an attempt to create such role.
+
+By default this role uses a [CI repositories](http://pkg.ci.collectd.org/) from collectd 
+vendor to install the latest versions of agent and plugins.
 
 
 Requirements
@@ -28,7 +33,29 @@ for main variables which you may want to change.
   * _collectd_version_ is a desired version of collectd agent or plugins;
 
   * _collectd.plugins_ is a section to declare plugin settings which you want
-    to use in your environment;
+    to use in your environment. There are a couple ways to define plugins. The first
+    one allow to assign _true/false_ value:
+
+        plugin-name: true or false
+
+    if you wish to enable/disable plugin with default settings, for example to enable
+    interface plugin just add this configuration:
+
+        collectd:
+          ...
+          plugins:
+            interface: true
+
+    The second way provides an ability to redefine plugin settings:
+
+        plugin-name:
+          enabled: true or false
+          file: a file where plugin configuration will be saved
+          options:
+            plugin options in YAML format
+
+    See examples below how to declare different parts of collectd configuration in YAML
+    format.
 
   * _collectd.service_ is a section to declare global settings for collectd
     agent;
@@ -47,7 +74,7 @@ An example of how to use collectd agent:
         - hosts: all
           roles:
             - role: collectd
-              collectd_version: 5.5.1
+              collectd_version: 5.5.2
               collectd:
                 service:
                   options:
@@ -67,7 +94,6 @@ An example of how to use collectd agent:
                         EscapeCharacter: "_"
                         SeparateInstances: true
                         StoreRates: false
-                        AlwaysAppendDS: false
                         AlwaysAppendDS: false
                   # Write configuration in main configuration file
                   network:
