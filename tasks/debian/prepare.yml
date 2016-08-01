@@ -3,12 +3,13 @@
 - name: add repository key
   apt_key: url={{ item.key }}
            state=present
-  with_items: "{{ collectd.providers.pkg.repositories }}"
+  with_items: "{{ collectd.providers.pkg.repositories | map(attribute='key') | list }}"
   when: ansible_pkg_mgr == "apt"
 
 - name: add repositories
   apt_repository: repo="deb {{ item.url }}"
                   filename="{{ collectd.service.name }}"
                   state=present
-  with_items: "{{ collectd.providers.pkg.repositories }}"
+  with_items: "{{ collectd.providers.pkg.repositories | map(attribute='url') | list }}"
   when: ansible_pkg_mgr == "apt"
+

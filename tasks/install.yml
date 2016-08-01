@@ -2,6 +2,7 @@
 
 - name: install packages
   package: name={{ collectd.providers.pkg.delim.join([item, collectd.service.version]) }}*
+           update_cache=yes
            state=present
   with_items: "{{ collectd.providers.pkg.packages | select | list }}"
 

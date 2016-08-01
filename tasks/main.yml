@@ -9,6 +9,7 @@
 
 - name: include OS-specific settings
   include_vars: "{{ ansible_os_family | lower }}.yml"
+  when: collectd_use_role_os_facts | bool
   tags: always
 
 - include: prepare.yml
