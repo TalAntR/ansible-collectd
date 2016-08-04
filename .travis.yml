@@ -37,3 +37,6 @@ script:
 
   # Remove container
   - docker rm -f centos-6
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
