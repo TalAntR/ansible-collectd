@@ -1,15 +1,25 @@
 ---
 
-- name: add repository key
-  apt_key: url={{ item.key }}
-           state=present
-  with_items: "{{ collectd.providers.pkg.repositories | map(attribute='key') | list }}"
+- block:
+  - name: get OS codename
+    command: sed -n 's/^VERSION.*(\(.*\)).*/\1/p' /etc/os-release
+    register: cn
+
+  - name: set OS codename fact
+    set_fact:
+      ansible_lsb: "{{ {'codename': cn.stdout } }}"
+  when: ansible_lsb is undefined
+
+- name: add GPG keys for repositories
+  apt_key: url={{ item }} state=present
+  with_items: "{{ collectd.providers.pkg.repositories.values() | map(attribute='keys') | sum(start=[]) | unique | list }}"
   when: ansible_pkg_mgr == "apt"
 
+
 - name: add repositories
-  apt_repository: repo="deb {{ item.url }}"
+  apt_repository: repo="deb {{ item }}"
                   filename="{{ collectd.service.name }}"
                   state=present
-  with_items: "{{ collectd.providers.pkg.repositories | map(attribute='url') | list }}"
+  with_items: "{{ collectd.providers.pkg.repositories.values() | map(attribute='url') | unique | list }}"
   when: ansible_pkg_mgr == "apt"
 

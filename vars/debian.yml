@@ -14,5 +14,9 @@ collectd:
     pkg:
       delim: "="
       repositories:
-        - url: "http://pkg.ci.collectd.org/deb/ {{ ansible_lsb.codename }} collectd-{{ collectd_version.split('.')[:2] | join('.') }}"
-          key: "http://pkg.ci.collectd.org/pubkey.asc"
+        Collectd:
+          url: "http://pkg.ci.collectd.org/deb/ {{ ansible_lsb.codename }} collectd-{{ collectd_version.split('.')[:2] | join('.') }}"
+          keys: [ "http://pkg.ci.collectd.org/pubkey.asc" ]
+      packages:
+        - collectd
+        - collectd-utils

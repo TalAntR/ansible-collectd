@@ -3,7 +3,7 @@
 - hosts: all
   gather_facts: yes
   connection: docker
-  remote_user: ansible
+  remote_user: root
   roles:
     - role: collectd
       collectd_version: 5.5.2
