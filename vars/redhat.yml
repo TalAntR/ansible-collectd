@@ -1,3 +1,17 @@
 ---
 
-# All varibales are defined in defaults/main.yml for RedHat family
+collectd:
+  # Source for binary files
+  providers:
+    # Configuration settings and packages for RHEL-based Linux by default
+    pkg:
+      # Delimiter for package name and version
+      delim: "-"
+      repositories:
+        Collectd:
+          url:  "http://pkg.ci.collectd.org/rpm/collectd-{{ collectd_version.split('.')[:2] | join('.') }}/epel-{{ ansible_distribution_major_version }}-$basearch"
+          keys: [ "http://pkg.ci.collectd.org/pubkey.asc" ]
+      packages:
+        - collectd
+        - collectd-disk
+        - collectd-netlink
