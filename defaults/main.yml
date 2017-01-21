@@ -1,8 +1,5 @@
 collectd_version: "{{ version | default('0.0.0') }}"
 
-# Determines whether OS-specific variables are used in playbook
-collectd_use_role_os_facts: yes
-
 collectd:
 
   service:
