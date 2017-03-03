@@ -10,7 +10,13 @@ collectd:
       repositories:
         Collectd:
           url:  "http://pkg.ci.collectd.org/rpm/collectd-{{ collectd_version.split('.')[:2] | join('.') }}/epel-{{ ansible_distribution_major_version }}-$basearch"
-          keys: [ "http://pkg.ci.collectd.org/pubkey.asc" ]
+          keys:
+            - "http://pkg.ci.collectd.org/pubkey.asc"
+          description: "Collectd CI repository"
+
+      # Yum packages which are installed on prepare phase
+      prerequisites: []
+
       packages:
         - collectd
         - collectd-disk
