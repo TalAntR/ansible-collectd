@@ -80,6 +80,7 @@ An example of how to use collectd agent:
                   options:
                     FQDNLookup: false
                 plugins:
+
                   # Write configuration in graphite.conf file
                   write_graphite:
                     file: graphite
@@ -95,6 +96,7 @@ An example of how to use collectd agent:
                         SeparateInstances: true
                         StoreRates: false
                         AlwaysAppendDS: false
+
                   # Write configuration in main configuration file
                   network:
                     enabled: false
@@ -102,6 +104,57 @@ An example of how to use collectd agent:
                       Server:
                         - "collectd-server-01.example.lo	23451"
                         - "collectd-server-02.example.lo	23451"
+
+
+Install collectd agent from EPEL repo for RHEL-based systems:
+
+
+        - hosts: rhel
+          roles:
+            - role: collectd
+              collectd_version: 5.7.1
+              collectd:
+                # EPEL repo is used for this installation
+                providers:
+                  pkg:
+                    repositories:
+                      Collectd:
+                        enabled: no
+                    prerequisites:
+                      - epel-release
+                    packages:
+                      - collectd
+                      - collectd-netlink
+
+                service:
+                  options:
+                    FQDNLookup: false
+
+                plugins:
+                  # Reporting of physical memory usage
+                  memory:
+                    enabled: true
+                    options:
+                      ValuesAbsolute: true
+                      ValuesPercentage: true
+
+                  uptime:
+                    enabled: true
+
+                  write_graphite:
+                    file: graphite
+                    enabled: true
+                    options:
+                      Node "carbon-relay":
+                        Host: "{{ graphite.host }}"
+                        Port: "{{ graphite.port }}"
+                        Prefix: "{{ graphite.prefix }}"
+                        LogSendErrors: true
+                        Protocol: "udp"
+                        EscapeCharacter: "_"
+                        SeparateInstances: true
+                        StoreRates: false
+                        AlwaysAppendDS: false
 
 
 License
