@@ -6,7 +6,7 @@
             owner={{ collectd.service.owner }}
             group={{ collectd.service.owner }}
             mode=0640
-  with_items: "{{ collectd.plugins.values() | selectattr('file','defined') | groupby('file') | map(attribute='grouper') | list }}"
+  with_items: "{{ collectd.plugins.values() | selectattr('file','defined') |  map(attribute='file') | unique | list }}"
   notify: restart collectd
 
 - name: deliver configuration

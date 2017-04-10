@@ -6,12 +6,24 @@
   remote_user: root
   roles:
     - role: collectd
-      collectd_version: 5.7.0
+      collectd_version: 5.7.1
       collectd:
+
         service:
           options:
             FQDNLookup: false
+
         plugins:
+          # Reporting of physical memory usage
+          memory:
+            enabled: true
+            options:
+              ValuesAbsolute: true
+              ValuesPercentage: true
+
+          uptime:
+            enabled: true
+
           write_graphite:
             file: graphite
             enabled: true
