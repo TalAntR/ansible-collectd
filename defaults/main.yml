@@ -21,10 +21,17 @@ collectd:
     # Processes and files owner
     owner: "root"
 
+
     # Global options for collectd service
     options:
       AutoLoadPlugin: false
       Include: "/etc/collectd.d/*.conf"
+
+  # Collection of user defined templates
+  templates: {}
+  #  collectd/generic-jmx.conf.j2:
+  #    file: generic-jmx
+  #    enabled: true
 
   plugins:
     # Submit all events to the syslog-daemon

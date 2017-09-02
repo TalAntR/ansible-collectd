@@ -74,7 +74,7 @@ An example of how to use collectd agent:
         - hosts: all
           roles:
             - role: collectd
-              collectd_version: 5.5.2
+              collectd_version: 5.7.1
               collectd:
                 service:
                   options:

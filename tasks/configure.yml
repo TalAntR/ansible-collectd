@@ -9,6 +9,17 @@
   with_items: "{{ collectd.plugins.values() | selectattr('file','defined') |  map(attribute='file') | unique | list }}"
   notify: restart collectd
 
+- name: deliver user-defined configuration
+  template: src={{ item.value.template }}
+            dest={{ collectd.service.conf }}/{{ item.key }}.conf
+            owner={{ collectd.service.owner }}
+            group={{ collectd.service.owner }}
+            mode=0640
+  when: item.value.enable | default(false) | bool
+  with_dict: "{{ collectd.templates }}"
+  notify: restart collectd
+
+
 - name: deliver configuration
   template: src=collectd.conf.j2
             dest={{ collectd.service.conf }}/../collectd.conf
