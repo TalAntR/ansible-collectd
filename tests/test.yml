@@ -6,7 +6,7 @@
   remote_user: root
   roles:
     - role: collectd
-      collectd_version: 5.7.1
+      collectd_version: 5.7.2
       collectd:
 
         service:

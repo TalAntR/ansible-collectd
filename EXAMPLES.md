@@ -4,7 +4,7 @@
     - hosts: all
       roles:
         - role: collectd
-          collectd_version: 5.6.0
+          collectd_version: 5.7.1
           collectd:
 
             # EPEL repo is used for this installation
@@ -31,7 +31,7 @@
                   Node "ssp-carbon-relay":
                     Host: "{{ groups['collectd-gw'] | first }}"
                     Port: "2003"
-                    Prefix: "epiphany.ssp.prod.us-east.ec2."
+                    Prefix: "owner.project.prod.us-east.ec2."
                     LogSendErrors: true
                     Protocol: "udp"
                     EscapeCharacter: "_"
