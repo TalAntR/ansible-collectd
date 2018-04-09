@@ -7,15 +7,11 @@ galaxy_info:
   description: Collectd daemon for RHEL- and Debian-based Linux.
   company: "Thumbtack Technology, LLC"
   license: "MIT"
-  min_ansible_version: 2.2
+  min_ansible_version: 2.4
   platforms:
     - name: EL
-      versions:
-      - 6
-      - 7
+      versions: [6, 7]
     - name: Debian
-      versions:
-      - 7
-      - 8
+      versions: [9]
   galaxy_tags:
     - monitoring

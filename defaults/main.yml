@@ -1,4 +1,5 @@
-collectd_version: "{{ version | default('0.0.0') }}"
+versions:
+  collectd: "{{ version | default('0.0.0') }}"
 
 collectd:
 
@@ -7,7 +8,7 @@ collectd:
     name: "collectd"
 
     # Version of the collectd daemon
-    version: "{{ collectd_version }}"
+    version: "{{ versions.collectd }}"
 
     # Base/working directory for collectd daemon
     home: "{{ collectd_home | default('/var/lib/collectd') }}"

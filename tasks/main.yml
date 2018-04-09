@@ -3,29 +3,37 @@
   # To override collectd settings by user, just add a group_vars file
   # with OS family name and put desired settings there
 - name: create OS-specific groups
-  group_by: key="{{ ansible_os_family | lower }}"
+  group_by:
+    key: "{{ ansible_os_family | lower }}"
   when: ansible_os_family is defined
   tags: always
 
 - name: include OS-specific settings
-  include_vars: file="{{ item }}"
-                name="_os_"
+  include_vars:
+    file: "{{ item }}"
+    name: "_os_"
   with_first_found:
     - "{{ ansible_os_family | lower }}.yml"
   tags: always
 
-- include: prepare.yml svc="{{ _os_.collectd | combine(collectd, recursive=True) }}"
+- import_tasks: prepare.yml
+  vars:
+    svc: "{{ _os_.collectd | combine(collectd, recursive=True) }}"
   tags: prepare
 
-- include: install.yml svc="{{ _os_.collectd | combine(collectd, recursive=True) }}"
+- import_tasks: install.yml
+  vars:
+    svc: "{{ _os_.collectd | combine(collectd, recursive=True) }}"
   tags: install
 
-- include: configure.yml
+- import_tasks: configure.yml
+  vars:
+    svc: "{{ _os_.collectd | combine(collectd, recursive=True) }}"
   tags: configure
 
-- include: restart.yml
+- import_tasks: restart.yml
   tags: [start, restart]
 
 # Verification tasks to make sure that the service is fine
-- include: verify.yml
+- import_tasks: verify.yml
   tags: verify

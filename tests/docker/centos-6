@@ -1,0 +1,33 @@
+# CentOS 6 image to test ansible roles
+# How to build:  docker build --rm --tag ansible:el6 --file centos-6 .
+# How to start:  docker run -d --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name el6 ansible:el6
+
+
+FROM centos:6
+
+LABEL maintainer="Anton Talevnin <talantr@gmail.com>"
+
+# Remote user with sudo privileges to perform SSH commands
+ARG user=ansible
+
+RUN yum update -y && yum -y install \
+    openssl \
+    sudo && \
+    yum clean all && rm -rf /var/cache/yum
+
+############################################################################################
+# Configure SSH server
+RUN yum -y install openssh-server && \
+    sed -i -e 's/#\?\s*UseDNS.*/UseDNS no/' -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && \
+    sed -i -e 's/#\?\s*PermitRootLogin.*/PermitRootLogin no/' -e 's/#\?\s*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config && \
+    service sshd start && \
+    mkdir /var/run/sshd; \
+    localedef -i en_US -f UTF-8 en_US.UTF-8; \
+    getent passwd ${user} >/dev/null || useradd -m -d /home/${user} -s /bin/bash ${user}; \
+    install -m 0700 -o ${user} -g ${user} -d /home/${user}/.ssh; \
+    echo "${user}:$(openssl rand -base64 24)" | chpasswd; \
+    echo "${user} ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/${user}
+
+STOPSIGNAL SIGRTMIN+3
+
+CMD ["/usr/sbin/sshd", "-D"]

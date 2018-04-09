@@ -1,3 +1,6 @@
+versions:
+  collectd: 5.7.1
+
 collectd:
   providers:
     pkg:

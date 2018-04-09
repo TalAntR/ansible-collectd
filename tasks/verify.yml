@@ -1,4 +1,8 @@
 ---
 
 - name: get service status
-  service: name={{ collectd.service.daemon }} state=started
+  service:
+    name: "{{ collectd.service.daemon }}"
+    state: started
+  register: rs
+  failed_when: "rs is changed"

@@ -1,4 +1,9 @@
 ---
 
 - name: restart collectd
-  service: name={{ collectd.service.daemon }} state=restarted
+  service:
+    name: "{{ collectd.service.daemon }}"
+    state: restarted
+
+- name: reload systemd
+  systemd: daemon_reload=yes

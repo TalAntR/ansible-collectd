@@ -6,14 +6,28 @@
   remote_user: root
   roles:
     - role: collectd
-      collectd_version: 5.7.2
       collectd:
+        providers:
+          pkg:
+            repositories:
+              # Disable collectd CI repository which is default.
+              Collectd:
+                enabled: no
 
-        service:
+        service :
           options:
             FQDNLookup: false
 
         plugins:
+          # Collects file system usage information
+          df:
+            enabled: true
+            options:
+              ReportByDevice: true
+              ReportInodes: true
+              ValuesAbsolute: true
+              ValuesPercentage: true
+
           # Reporting of physical memory usage
           memory:
             enabled: true
@@ -38,3 +52,4 @@
                 SeparateInstances: true
                 StoreRates: false
                 AlwaysAppendDS: false
+
