@@ -1,7 +1,12 @@
+# TODO: collectd 4.10 is available for CentOS 6 only
+versions:
+  collectd: 5.8.0
+
 collectd:
   providers:
     pkg:
+      prerequisites:
+        - epel-release
       packages:
         - collectd
-        - collectd-disk
         - collectd-netlink

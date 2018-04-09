@@ -1,21 +1,25 @@
-# CentOS 7 image to test ansible roles
+# Debian 9 image to test ansible roles
+# docker build --rm --tag ansible:debian9 --file docker/debain-9 .
 
-FROM centos:7
+FROM debian:9
 
-MAINTAINER Anton Talevnin <talantr@gmail.com>
+LABEL maintainer="Anton Talevnin <talantr@gmail.com>"
 
-RUN yum update -y && yum -y install \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gnupg \
+    locales \
     openssl \
+    python \
     sudo \
-    systemd; \
-    yum clean all
+    systemd \
+    && apt-get clean
 
 ############################################################################################
 # Enabling systemd
 ############################################################################################
 ENV container docker
 
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ "$i" = "systemd-tmpfiles-setup.service" ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\
 rm -f /lib/systemd/system/local-fs.target.wants/*; \
@@ -26,18 +30,20 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 VOLUME [ "/sys/fs/cgroup" ]
 
+
 ############################################################################################
-# Configure SSH server and create ansible user
+# Configure SSH server
 ############################################################################################
-RUN yum -y install openssh-server; \
-    sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config; \
-    sed -i 's/#\?\s*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config;  \
-    sed -i 's/#\?\s*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config; \
-    systemctl enable sshd.service; \
-    localedef -i en_US -f UTF-8 en_US.UTF-8; \
+RUN apt-get install -y openssh-server && \
+    sed -i -e 's/#\?\s*UseDNS.*/UseDNS no/' -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && \
+    sed -i -e 's/#\?\s*PermitRootLogin.*/PermitRootLogin no/' -e 's/#\?\s*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config && \
+    systemctl enable ssh.service; \
+    mkdir /var/run/sshd; \
+    localedef -i en_US -f UTF-8 en_US.UTF-8 \
     getent passwd ansible >/dev/null || useradd -m -d /home/ansible -s /bin/bash ansible; \
     install -m 0700 -o ansible -g ansible -d /home/ansible/.ssh; \
     echo "ansible:$(openssl rand -base64 24)" | chpasswd; \
     echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/ansible
 
-CMD ["/usr/sbin/init"]
+
+CMD ["/lib/systemd/systemd"]

@@ -1,13 +1,16 @@
 ---
 
 - name: prepare rhel
-  include: redhat/prepare.yml
+  include_tasks: redhat/prepare.yml
   when: (ansible_os_family | lower == "redhat")
 
 - name: prepare debian
-  include: debian/prepare.yml
+  include_tasks: debian/prepare.yml
   when: (ansible_os_family | lower == "debian")
 
 - name: install/upgrade prerequisites
-  package: name={{ item }} state=present update_cache=yes
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
   with_items: "{{ svc.providers.pkg.prerequisites | default([]) }}"

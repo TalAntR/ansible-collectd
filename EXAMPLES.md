@@ -4,13 +4,14 @@
     - hosts: all
       roles:
         - role: collectd
-          collectd_version: 5.7.1
+          collectd_version: 5.8.0
           collectd:
 
             # EPEL repo is used for this installation
             providers:
               pkg:
                 repositories:
+                  # Disable collectd CI repository which is default.
                   Collectd:
                     enabled: no
                 prerequisites:
@@ -28,7 +29,7 @@
                 file: graphite
                 enabled: true
                 options:
-                  Node "ssp-carbon-relay":
+                  Node "carbon-relay":
                     Host: "{{ groups['collectd-gw'] | first }}"
                     Port: "2003"
                     Prefix: "owner.project.prod.us-east.ec2."

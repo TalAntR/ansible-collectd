@@ -15,7 +15,7 @@ collectd:
       delim: "="
       repositories:
         Collectd:
-          url: "http://pkg.ci.collectd.org/deb/ {{ ansible_lsb.codename }} collectd-{{ collectd_version.split('.')[:2] | join('.') }}"
+          url: "http://pkg.ci.collectd.org/deb/ {{ ansible_lsb.codename }} collectd-{{ collectd.service.version.split('.')[:2] | join('.') }}"
           keys: [ "http://pkg.ci.collectd.org/pubkey.asc" ]
 
       # Apt packages which are installed on prepare phase

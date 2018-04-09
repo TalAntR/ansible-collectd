@@ -1,13 +1,18 @@
 ---
 
 - name: install packages
-  package: name={{ svc.providers.pkg.delim.join([item, collectd.service.version]) }}*
-           update_cache=yes
-           state=present
+  package:
+    name: "{{ svc.providers.pkg.delim.join([item, collectd.service.version]) }}*"
+    update_cache: yes
+    state: present
   with_items: "{{ svc.providers.pkg.packages | select | list }}"
 
 - name: create *.conf.d folder
-  file: path={{ svc.service.conf }} state=directory
+  file:
+    path: "{{ svc.service.conf }}"
+    state: directory
 
 - name: enable autostart on boot
-  service: name={{ svc.service.daemon }} enabled=yes
+  service:
+    name: "{{ svc.service.daemon }}"
+    enabled: yes

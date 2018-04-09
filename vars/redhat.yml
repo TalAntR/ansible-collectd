@@ -9,7 +9,7 @@ collectd:
       delim: "-"
       repositories:
         Collectd:
-          url:  "http://pkg.ci.collectd.org/rpm/collectd-{{ collectd_version.split('.')[:2] | join('.') }}/epel-{{ ansible_distribution_major_version }}-$basearch"
+          url:  "http://pkg.ci.collectd.org/rpm/collectd-{{ collectd.service.version.split('.')[:2] | join('.') }}/epel-{{ ansible_distribution_major_version }}-$basearch"
           keys:
             - "http://pkg.ci.collectd.org/pubkey.asc"
           description: "Collectd CI repository"
