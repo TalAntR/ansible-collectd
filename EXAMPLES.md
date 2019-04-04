@@ -4,7 +4,8 @@
     - hosts: all
       roles:
         - role: collectd
-          collectd_version: 5.8.0
+          versions:
+            collectd: 5.8.1
           collectd:
 
             # EPEL repo is used for this installation
