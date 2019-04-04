@@ -74,7 +74,7 @@ An example of how to use collectd agent:
           roles:
             - role: collectd
               versions:
-                collectd: 5.5.2
+                collectd: 5.8.1
               collectd:
                 service:
                   options:
@@ -111,7 +111,7 @@ An example of how to use collectd agent:
       roles:
         - role: collectd
           versions:
-            collectd: 5.8.0
+            collectd: 5.8.1
           collectd:
 
             # EPEL repo is used for this installation
