@@ -1,14 +1,8 @@
 ---
 
-- block:
-  - name: get OS codename
-    command: sed -n 's/^VERSION.*(\(.*\)).*/\1/p' /etc/os-release
-    warn: no
-    register: cn
-
-  - name: set OS codename fact
-    set_fact:
-      ansible_lsb: "{{ {'codename': cn.stdout } }}"
+- name: set OS codename fact
+  set_fact:
+    ansible_lsb: "{{ {'codename': lookup('ini', 'VERSION type=properties file=/etc/os-release') | regex_search('\\((.*))\\)', '\\1') } }}"
   when: ansible_lsb is undefined or ansible_lsb.codename is undefined
 
 - name: add GPG keys for repositories
