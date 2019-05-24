@@ -11,16 +11,15 @@ collectd:
   # Define settings for APT repository
   providers:
     # Configuration settings and packages for Debian-based Linux
-    pkg:
-      delim: "="
+    pm:
       repositories:
         Collectd:
-          url: "http://pkg.ci.collectd.org/deb/ {{ ansible_lsb.codename }} collectd-{{ collectd.service.version.split('.')[:2] | join('.') }}"
+          url: "http://pkg.ci.collectd.org/deb/ {{ ansible_lsb.codename }} collectd-{{ collectd.version.split('.')[:2] | join('.') }}"
           keys: [ "http://pkg.ci.collectd.org/pubkey.asc" ]
 
       # Apt packages which are installed on prepare phase
       prerequisites: []
 
       packages:
-        - collectd
-        - collectd-utils
+        - "collectd={{ collectd.version }}"
+        - "collectd-utils={{ collectd.version }}"

@@ -3,12 +3,12 @@ versions:
 
 collectd:
 
+  # Version of the collectd daemon
+  version: "{{ versions.collectd }}"
+
   service:
     # Name of the managed service
     name: "collectd"
-
-    # Version of the collectd daemon
-    version: "{{ versions.collectd }}"
 
     # Base/working directory for collectd daemon
     home: "{{ collectd_home | default('/var/lib/collectd') }}"

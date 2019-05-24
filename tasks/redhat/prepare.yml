@@ -8,5 +8,5 @@
                   gpgkey="{{ item.value['keys'] | join(' ') }}"
                   gpgcheck="{{ item.value.gpgcheck | default('yes') }}"
                   enabled="{{ item.value.enabled | default('yes') }}"
-  with_dict: "{{ svc.providers.pkg.repositories | default({}) }}"
+  with_dict: "{{ svc.providers.pm.repositories | default({}) }}"
   no_log: yes

@@ -8,13 +8,13 @@
     - role: collectd
       collectd:
         providers:
-          pkg:
+          pm:
             repositories:
               # Disable collectd CI repository which is default.
               Collectd:
                 enabled: no
 
-        service :
+        service:
           options:
             FQDNLookup: false
 
