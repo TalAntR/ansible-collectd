@@ -5,12 +5,13 @@
   when: (ansible_os_family | lower == "redhat")
 
 - name: prepare debian
-  include_tasks: debian/prepare.yml
+  import_tasks: debian/prepare.yml
   when: (ansible_os_family | lower == "debian")
+  tags: [ prepare ]
 
 - name: install/upgrade prerequisites
   package:
     name: "{{ item }}"
     state: present
     update_cache: yes
-  with_items: "{{ svc.providers.pkg.prerequisites | default([]) }}"
+  with_items: "{{ svc.providers.pm.prerequisites | default([]) }}"

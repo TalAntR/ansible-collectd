@@ -8,5 +8,5 @@ collectd:
       prerequisites:
         - epel-release
       packages:
-        - collectd
-        - collectd-netlink
+        - "collectd-{{ versions.collectd }}"
+        - "collectd-netlink-{{ versions.collectd }}"

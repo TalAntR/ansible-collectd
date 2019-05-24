@@ -2,10 +2,10 @@
 
 - name: install packages
   package:
-    name: "{{ svc.providers.pkg.delim.join([item, collectd.service.version]) }}*"
+    name: "{{ item }}*"
     update_cache: yes
     state: present
-  with_items: "{{ svc.providers.pkg.packages | select | list }}"
+  with_items: "{{ svc.providers.pm.packages | select | list }}"
 
 - name: create *.conf.d folder
   file:

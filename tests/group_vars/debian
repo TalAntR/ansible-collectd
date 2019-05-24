@@ -3,7 +3,7 @@ versions:
 
 collectd:
   providers:
-    pkg:
+    pm:
       packages:
-        - collectd
-        - collectd-utils
+        - "collectd={{ versions.collectd }}"
+        - "collectd-utils={{versions.collectd }}"

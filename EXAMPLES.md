@@ -7,10 +7,9 @@
           versions:
             collectd: 5.8.1
           collectd:
-
             # EPEL repo is used for this installation
             providers:
-              pkg:
+              pm:
                 repositories:
                   # Disable collectd CI repository which is default.
                   Collectd:
@@ -26,6 +25,28 @@
                 FQDNLookup: false
 
             plugins:
+              df:
+                enabled: true
+                options:
+                  ReportByDevice: true
+                  ReportInodes: true
+                  ValuesAbsolute: true
+                  ValuesPercentage: true
+
+              # Reporting of physical memory usage
+              memory:
+                enabled: true
+                options:
+                  ValuesAbsolute: true
+                  ValuesPercentage: true
+
+              # Collects information about used and available swap space
+              swap:
+                enabled: true
+                options:
+                  ValuesAbsolute: true
+                  ValuesPercentage: true
+
               write_graphite:
                 file: graphite
                 enabled: true

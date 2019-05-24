@@ -116,7 +116,7 @@ An example of how to use collectd agent:
 
             # EPEL repo is used for this installation
             providers:
-              pkg:
+              pm:
                 repositories:
                   # Disable collectd CI repository which is default.
                   Collectd:

@@ -21,7 +21,6 @@
   with_dict: "{{ svc.templates }}"
   notify: restart collectd
 
-
 - name: deliver configuration
   template:
     src: collectd.conf.j2

@@ -9,7 +9,7 @@
   apt_key:
     url: "{{ item }}"
     state: present
-  with_items: "{{ svc.providers.pkg.repositories.values() | selectattr('enabled') | map(attribute='keys') | sum(start=[]) | unique | list }}"
+  with_items: "{{ svc.providers.pm.repositories.values() | selectattr('enabled') | map(attribute='keys') | sum(start=[]) | unique | list }}"
   when: ansible_pkg_mgr == "apt"
 
 
@@ -18,6 +18,6 @@
     repo: "deb {{ item }}"
     filename: "{{ collectd.service.name }}"
     state: present
-  with_items: "{{ svc.providers.pkg.repositories.values() | selectattr('enabled') | map(attribute='url') | list }}"
+  with_items: "{{ svc.providers.pm.repositories.values() | selectattr('enabled') | map(attribute='url') | list }}"
   when: ansible_pkg_mgr == "apt"
 
