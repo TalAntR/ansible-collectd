@@ -1,7 +1,7 @@
-# Debian 9 image to test ansible roles
-# docker build --rm --tag ansible:debian9 --file docker/debain-9 .
+# Debian 10 image to test ansible roles
+# docker build --rm --tag ansible:debian10 --file docker/debain-10 .
 
-FROM debian:9
+FROM debian:10
 
 LABEL maintainer="Anton Talevnin <talantr@gmail.com>"
 
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gnupg \
     locales \
     openssl \
-    python \
+    python3 \
     sudo \
     systemd \
     && apt-get clean

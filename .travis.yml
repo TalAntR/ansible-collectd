@@ -1,8 +1,13 @@
 ---
 language: python
 
+env: 
+  - ANSIBLE_VERSION="2.8"
+  - ANSIBLE_VERSION="2.9"
+
 python:
-  - "2.7"
+  - 2.7
+  - 3.7
 
 # Use the new container infrastructure
 sudo: required
@@ -12,35 +17,40 @@ services:
 
 before_install:
   # Build CentOS image to verify ansible role there
-  - docker build --rm=true --tag=el-6 --file tests/docker/centos-6 .
-  - docker build --rm=true --tag=el-7 --file tests/docker/centos-7 .
+  - docker build --rm=true --tag=el-07 --file tests/docker/centos-07 .
+  - docker build --rm=true --tag=el-08 --file tests/docker/centos-08 .
   # Build Debian images
-  - docker build --rm=true --tag=dn-9 --file tests/docker/debian-9 .
+  - docker build --rm=true --tag=dn-09 --file tests/docker/debian-09 .
+  - docker build --rm=true --tag=dn-10 --file tests/docker/debian-10 .
 
 install:
-  - pip install ansible && ansible --version
+  - pip install ansible==${ANSIBLE_VERSION} && ansible --version
+  - pip install ansible-lint
   # Rename a target directory
   - ln -sf -T $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR/../collectd
   # Create ansible.cfg with correct roles_path
   - printf "[defaults]\nroles_path=$(dirname $TRAVIS_BUILD_DIR)\nhash_behaviour=merge" > ansible.cfg
 
 script:
+  - ansible-lint tests/test.yml
   # Add container name in inventory file and check syntax of the playbook
-  - echo centos-6 >> tests/inventory
-  - echo centos-7 >> tests/inventory
-  - echo debian-9 >> tests/inventory
+  - echo centos-07 >> tests/inventory
+  - echo centos-08 >> tests/inventory
+  - echo debian-09 >> tests/inventory
+  - echo debian-10 >> tests/inventory
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
   # Run container with SSH server
-  - docker run -d --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --name centos-6 el-6
-  - docker run -d --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --name centos-7 el-7
-  - docker run -d --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --name debian-9 dn-9
+  - docker run -d --tmpfs /run --tmpfs /tmp --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --name centos-07 el-07
+  - docker run -d --tmpfs /run --tmpfs /tmp --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --name centos-08 el-08
+  - docker run -d --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --name debian-09 dn-09
+  - docker run -d --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --name debian-10 dn-10
 
   # Run playbook
   - ansible-playbook tests/test.yml -i tests/inventory --become
 
   # Remove containers
-  - docker rm -f centos-6 centos-7 debian-9
+  - docker rm -f centos-07 centos-08 debian-09 debian-10
 
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+#notifications:
+#  webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -1,23 +1,28 @@
 ---
 
-- name: set OS codename fact
-  set_fact:
-    ansible_lsb: "{{ {'codename': lookup('ini', 'VERSION type=properties file=/etc/os-release') | regex_search('\\((.*))\\)', '\\1') } }}"
+- block:
+
+  - name: get OS version facts
+    slurp:
+      src: "/etc/os-release"
+    register: "_osv_"
+
+  - name: set OS codename fact
+    set_fact:
+      ansible_lsb: "{{ {'codename': _osv_.content | b64decode | regex_search('VERSION_CODENAME=(.*)', '\\1') | first } }}"
   when: ansible_lsb is undefined or ansible_lsb.codename is undefined
 
 - name: add GPG keys for repositories
   apt_key:
     url: "{{ item }}"
     state: present
-  with_items: "{{ svc.providers.pm.repositories.values() | selectattr('enabled') | map(attribute='keys') | sum(start=[]) | unique | list }}"
+  loop: "{{ _apt_ | flatten | selectattr('keys', 'defined') | map(attribute='keys') | sum(start=[]) | unique | list }}"
   when: ansible_pkg_mgr == "apt"
-
 
 - name: add repositories
   apt_repository:
     repo: "deb {{ item }}"
     filename: "{{ collectd.service.name }}"
     state: present
-  with_items: "{{ svc.providers.pm.repositories.values() | selectattr('enabled') | map(attribute='url') | list }}"
+  loop: "{{ _apt_ | flatten | selectattr('url', 'defined') | map(attribute='url') | list }}"
   when: ansible_pkg_mgr == "apt"
-

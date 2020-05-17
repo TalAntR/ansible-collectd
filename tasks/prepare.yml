@@ -5,13 +5,21 @@
   when: (ansible_os_family | lower == "redhat")
 
 - name: prepare debian
-  import_tasks: debian/prepare.yml
+  include_tasks: debian/prepare.yml
+  vars:
+    _apt_:
+      - "{{ svc.providers.apt.repositories.values() | selectattr('enabled', 'undefined') | list }}"
+      - "{{ svc.providers.apt.repositories.values() | selectattr('enabled', 'defined') | selectattr('enabled') | list }}"
   when: (ansible_os_family | lower == "debian")
-  tags: [ prepare ]
 
 - name: install/upgrade prerequisites
   package:
-    name: "{{ item }}"
-    state: present
+    name: "{{ item.1 }}"
     update_cache: yes
-  with_items: "{{ svc.providers.pm.prerequisites | default([]) }}"
+    state: present
+    use: "{{ item.0 }}"
+  loop: "{{ pm | zip(pm | map('extract', svc.providers, ['prerequisites'])) | selectattr('1') | list }}"
+  loop_control:
+    label: "{{ item.0 }} -> {{ item.1 }}"
+  vars:
+    pm: "{{ svc.providers.keys() | list }}"

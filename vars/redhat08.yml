@@ -1,0 +1,21 @@
+---
+
+collectd:
+  providers:
+    dnf:
+      repositories: {}
+
+      # Yum packages which are installed on prepare phase
+      prerequisites: ["epel-release"]
+
+      packages:
+        - "collectd-{{ collectd_version }}*"
+        - "collectd-netlink-{{ collectd_version }}*"
+        - "collectd-disk-{{ collectd_version }}*"
+  service:
+    # Location for configuration files
+    conf: "/etc/collectd.d"
+
+    # Global options for collectd service
+    options:
+      Include: "/etc/collectd.d/*.conf"

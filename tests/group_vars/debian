@@ -1,9 +1,0 @@
-versions:
-  collectd: 5.7.1
-
-collectd:
-  providers:
-    pm:
-      packages:
-        - "collectd={{ versions.collectd }}"
-        - "collectd-utils={{versions.collectd }}"
