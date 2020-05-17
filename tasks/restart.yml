@@ -1,6 +1,4 @@
 ---
 
 -  name: call restart handler
-   debug: msg="restart {{ collectd.service.daemon }} daemon"
-   changed_when: true
-   notify: restart collectd
+   meta: flush_handlers

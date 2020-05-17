@@ -1,25 +1,19 @@
 ---
 
 collectd:
-  service:
-    conf: /etc/collectd/collectd.conf.d
-
-    # Global options for collectd service
-    options:
-      Include: "/etc/collectd/collectd.conf.d/*.conf"
-
-  # Define settings for APT repository
   providers:
-    # Configuration settings and packages for Debian-based Linux
-    pm:
-      repositories:
-        Collectd:
-          url: "http://pkg.ci.collectd.org/deb/ {{ ansible_lsb.codename }} collectd-{{ collectd.version.split('.')[:2] | join('.') }}"
-          keys: [ "http://pkg.ci.collectd.org/pubkey.asc" ]
+    apt:
+      repositories: {}
 
       # Apt packages which are installed on prepare phase
       prerequisites: []
 
       packages:
-        - "collectd={{ collectd.version }}"
-        - "collectd-utils={{ collectd.version }}"
+        - "collectd={{ collectd.version }}*"
+        - "collectd-utils={{ collectd.version }}*"
+  service:
+    # Location for configuration files
+    conf: "/etc/collectd/collectd.conf.d"
+    # Global options for collectd service
+    options:
+      Include: "/etc/collectd/collectd.conf.d/*.conf"

@@ -1,6 +1,14 @@
 ---
 
-- name: get service status
+- name: test service config
+  command: "collectd -t"
+  changed_when: false
+
+- name: test service plugins
+  command: "collectd -T"
+  changed_when: false
+
+- name: test service status
   service:
     name: "{{ collectd.service.daemon }}"
     state: started

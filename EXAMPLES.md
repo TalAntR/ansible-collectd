@@ -1,11 +1,11 @@
 
 # Using EPEL repo for installation
 
+    ```
     - hosts: all
       roles:
         - role: collectd
-          versions:
-            collectd: 5.8.1
+          collectd_version: 5.8.1
           collectd:
             # EPEL repo is used for this installation
             providers:
@@ -61,3 +61,4 @@
                     SeparateInstances: true
                     StoreRates: false
                     AlwaysAppendDS: false
+    ```

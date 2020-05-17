@@ -1,10 +1,11 @@
-versions:
-  collectd: "{{ version | default('0.0.0') }}"
+---
+
+collectd_version: "{{ version | default('0.0.0') }}"
 
 collectd:
 
   # Version of the collectd daemon
-  version: "{{ versions.collectd }}"
+  version: "{{ collectd_version }}"
 
   service:
     # Name of the managed service
@@ -13,8 +14,8 @@ collectd:
     # Base/working directory for collectd daemon
     home: "{{ collectd_home | default('/var/lib/collectd') }}"
 
-    # Location for configuration files
-    conf: "/etc/collectd.d"
+    # Defined for specific OS in vars folder
+    #conf: "/etc/collectd.d"
 
     # Name of SysV script or Systemd unit
     daemon: "collectd"
@@ -26,7 +27,8 @@ collectd:
     # Global options for collectd service
     options:
       AutoLoadPlugin: false
-      Include: "/etc/collectd.d/*.conf"
+      # Defined for specific OS in vars folder
+      #Include: "/etc/collectd.d/*.conf"
 
   # Collection of user defined templates
   templates: {}

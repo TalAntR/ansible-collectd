@@ -1,26 +1,32 @@
 ---
 
-  # To override collectd settings by user, just add a group_vars file
-  # with OS family name and put desired settings there
+# Group target hosts by OS family and distribution version to override collectd
+# settings in group_vars files/directories
 - name: create OS-specific groups
   block:
-    - group_by:
+    - name: group hosts by OS family
+      group_by:
         key: "{{ ansible_os_family | lower }}"
       when: ansible_os_family is defined
 
-    - group_by:
-        key: "{{ ansible_os_family | lower }}:{{ ansible_distribution_major_version }}"
+    - name: group hosts by distribution
+      group_by:
+        key: "{{ ansible_os_family | lower }}{{ '%02d' | format(ansible_distribution_major_version | int) }}"
         parents:
           - "{{ ansible_os_family | lower }}"
-      when: ansible_os_family is defined and ansible_distribution_major_version is defined
+      when:
+        - ansible_os_family is defined
+        - ansible_distribution_major_version is defined
   tags: always
 
 - name: include OS-specific settings
   include_vars:
-    file: "{{ item }}"
+    file: "{{ lookup('first_found', arguments, errors='ignore') }}"
     name: "_"
-  with_first_found:
-    - "{{ ansible_os_family | lower }}.yml"
+  vars:
+    arguments:
+      files: "{{ group_names | sort(reverse=True) | map('regex_replace', '^(.*)$', '\\1.yml') | list }}"
+      paths: [ "vars" ]
   tags: always
 
 - import_tasks: prepare.yml

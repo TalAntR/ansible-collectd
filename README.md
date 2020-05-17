@@ -26,7 +26,7 @@ Role Variables
 --------------
 
 This role declares and uses the configurations variables in a hash under the
-_collectd_ key (besides a variable collectd_version). This is a description 
+_collectd_ key (besides a variable collectd_version). This is a description
 for main variables which you may want to change.
 
 

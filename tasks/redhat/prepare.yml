@@ -1,12 +1,14 @@
 ---
 
 - name: add yum repositories
-  yum_repository: name="{{ item.key }}"
-                  description="{{ item.value.description }}"
-                  file="{{ item.key }}"
-                  baseurl="{{ item.value.url }}"
-                  gpgkey="{{ item.value['keys'] | join(' ') }}"
-                  gpgcheck="{{ item.value.gpgcheck | default('yes') }}"
-                  enabled="{{ item.value.enabled | default('yes') }}"
-  with_dict: "{{ svc.providers.pm.repositories | default({}) }}"
+  yum_repository:
+    name: "{{ item.key }}"
+    description: "{{ item.value.description }}"
+    file: "{{ item.key }}"
+    baseurl: "{{ item.value.url }}"
+    gpgkey: "{{ item.value['keys'] | join(' ') }}"
+    gpgcheck: "{{ item.value.gpgcheck | default('yes') }}"
+    enabled: "{{ item.value.enabled | default('yes') }}"
+  loop: "{{ lookup('dict', svc.providers.yum.repositories | default({})) }}"
   no_log: yes
+  when: ansible_pkg_mgr == "yum"
