@@ -15,7 +15,7 @@
 - name: install/upgrade prerequisites
   package:
     name: "{{ item.1 }}"
-    update_cache: yes
+    update_cache: true
     state: present
     use: "{{ item.0 }}"
   loop: "{{ pm | zip(pm | map('extract', svc.providers, ['prerequisites'])) | selectattr('1') | list }}"

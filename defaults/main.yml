@@ -15,7 +15,7 @@ collectd:
     home: "{{ collectd_home | default('/var/lib/collectd') }}"
 
     # Defined for specific OS in vars folder
-    #conf: "/etc/collectd.d"
+    # conf: "/etc/collectd.d"
 
     # Name of SysV script or Systemd unit
     daemon: "collectd"
@@ -28,7 +28,7 @@ collectd:
     options:
       AutoLoadPlugin: false
       # Defined for specific OS in vars folder
-      #Include: "/etc/collectd.d/*.conf"
+      # Include: "/etc/collectd.d/*.conf"
 
   # Collection of user defined templates
   templates: {}
@@ -78,5 +78,4 @@ collectd:
   # IT'S NOT USED RIGHT NOW
   chains:
     pre-cache:
-      #- name:
     post-cache:

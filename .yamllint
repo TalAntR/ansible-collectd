@@ -3,7 +3,7 @@ extends: default
 
 rules:
   line-length:
-    max: 120
+    max: 128
     level: warning
   new-lines: disable
   indentation:

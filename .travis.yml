@@ -1,7 +1,7 @@
 ---
 language: python
 
-env: 
+env:
   - ANSIBLE_VERSION="2.8"
   - ANSIBLE_VERSION="2.9"
 
@@ -52,5 +52,5 @@ script:
   # Remove containers
   - docker rm -f centos-07 centos-08 debian-09 debian-10
 
-#notifications:
-#  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+# notifications:
+#   webhooks: https://galaxy.ansible.com/api/v1/notifications/

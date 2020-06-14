@@ -1,15 +1,14 @@
 ---
 
 - block:
+    - name: get OS version facts
+      slurp:
+        src: "/etc/os-release"
+      register: "_osv_"
 
-  - name: get OS version facts
-    slurp:
-      src: "/etc/os-release"
-    register: "_osv_"
-
-  - name: set OS codename fact
-    set_fact:
-      ansible_lsb: "{{ {'codename': _osv_.content | b64decode | regex_search('VERSION_CODENAME=(.*)', '\\1') | first } }}"
+    - name: set OS codename fact
+      set_fact:
+        ansible_lsb: "{{ {'codename': _osv_.content | b64decode | regex_search('VERSION_CODENAME=(.*)', '\\1') | first } }}"
   when: ansible_lsb is undefined or ansible_lsb.codename is undefined
 
 - name: add GPG keys for repositories

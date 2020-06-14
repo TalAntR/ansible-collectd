@@ -10,5 +10,5 @@
     gpgcheck: "{{ item.value.gpgcheck | default('yes') }}"
     enabled: "{{ item.value.enabled | default('yes') }}"
   loop: "{{ lookup('dict', svc.providers.yum.repositories | default({})) }}"
-  no_log: yes
+  no_log: true
   when: ansible_pkg_mgr == "yum"

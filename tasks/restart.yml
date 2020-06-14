@@ -1,4 +1,4 @@
 ---
 
--  name: call restart handler
-   meta: flush_handlers
+- name: call restart handler
+  meta: flush_handlers
